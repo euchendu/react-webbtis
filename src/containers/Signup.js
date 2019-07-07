@@ -7,15 +7,7 @@ import {
 } from 'react-bootstrap';
 import LoaderButton from '../components/LoaderButton';
 import './Signup.css';
-import { FirebaseContext } from '../components/Firebase';
-
-const SignUpPage = () => (
-  <div className="Signup">
-    <FirebaseContext.Consumer>
-      {firebase => <SignUpForm firebase={firebase} />}
-    </FirebaseContext.Consumer>
-  </div>
-);
+import { withFirebase } from '../components/Firebase';
 
 const INITIAL_STATE = {
   isLoading: false,
@@ -25,7 +17,7 @@ const INITIAL_STATE = {
   error: null,
 };
 
-class SignUpForm extends Component {
+class Signup extends Component {
   constructor(props) {
     super(props);
 
@@ -48,6 +40,7 @@ class SignUpForm extends Component {
     event.preventDefault();
 
     this.setState({ isLoading: true });
+    this.setState({ error: null });
 
     try {
       await this.signup(this.state.email, this.state.password);
@@ -63,51 +56,53 @@ class SignUpForm extends Component {
       .doCreateUserWithEmailAndPassword(email, password)
       .then(authUser => {
         this.setState({ ...INITIAL_STATE });
+        this.prods.history.push('/login');
       })
       .catch(error => {
         this.setState({ error });
+        this.setState({ isLoading: false });
       });
   }
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
-        <FormGroup controlId="email" bsSize="large">
-          <ControlLabel>Email</ControlLabel>
-          <FormControl
-            autoFocus
-            type="email"
-            value={this.state.email}
-            onChange={this.handleChange} />
-        </FormGroup>
-        <FormGroup controlId="password" bsSize="large">
-          <ControlLabel>Password</ControlLabel>
-          <FormControl
-            value={this.state.password}
-            onChange={this.handleChange}
-            type="password" />
-        </FormGroup>
-        <FormGroup controlId="confirmPassword" bsSize="large">
-          <ControlLabel>Confirm Password</ControlLabel>
-          <FormControl
-            value={this.state.confirmPassword}
-            onChange={this.handleChange}
-            type="password" />
-        </FormGroup>
-        {this.state.error && <p>{this.state.error.message}</p>}
-        <LoaderButton
-          block
-          bsSize="large"
-          disabled={!this.validateForm()}
-          type="submit"
-          isLoading={this.state.isLoading}
-          text="Signup"
-          loadingText="Signing up…" />
-      </form>
+      <div className="Signup">
+        <form onSubmit={this.handleSubmit}>
+          <FormGroup controlId="email" bsSize="large">
+            <ControlLabel>Email</ControlLabel>
+            <FormControl
+              autoFocus
+              type="email"
+              value={this.state.email}
+              onChange={this.handleChange} />
+          </FormGroup>
+          <FormGroup controlId="password" bsSize="large">
+            <ControlLabel>Password</ControlLabel>
+            <FormControl
+              value={this.state.password}
+              onChange={this.handleChange}
+              type="password" />
+          </FormGroup>
+          <FormGroup controlId="confirmPassword" bsSize="large">
+            <ControlLabel>Confirm Password</ControlLabel>
+            <FormControl
+              value={this.state.confirmPassword}
+              onChange={this.handleChange}
+              type="password" />
+          </FormGroup>
+          {this.state.error && <p>{this.state.error.message}</p>}
+          <LoaderButton
+            block
+            bsSize="large"
+            disabled={!this.validateForm()}
+            type="submit"
+            isLoading={this.state.isLoading}
+            text="Signup"
+            loadingText="Signing up…" />
+        </form>
+      </div>
     );
   }
 }
 
-export default withRouter(SignUpPage);
-
-export { SignUpForm };
+export default withRouter(withFirebase(Signup));

@@ -7,16 +7,7 @@ import {
 import { withRouter } from 'react-router-dom';
 import LoaderButton from '../components/LoaderButton';
 import './Login.css';
-import { FirebaseContext } from '../components/Firebase';
-
-const LoginPage = () => (
-  <div className="Login">
-    <FirebaseContext.Consumer>
-      {firebase => <LoginForm firebase={firebase} />}
-    </FirebaseContext.Consumer>
-  </div>
-);
-
+import { withFirebase } from '../components/Firebase';
 
 const INITIAL_STATE = {
   isLoading: false,
@@ -25,7 +16,7 @@ const INITIAL_STATE = {
   error: null,
 };
 
-class LoginForm extends Component {
+class Login extends Component {
   constructor(props) {
     super(props);
 
@@ -71,36 +62,36 @@ class LoginForm extends Component {
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
-        <FormGroup controlId="email" bsSize="large">
-          <ControlLabel>Email</ControlLabel>
-          <FormControl
-            autoFocus
-            type="email"
-            value={this.state.email}
-            onChange={this.handleChange} />
-        </FormGroup>
-        <FormGroup controlId="password" bsSize="large">
-          <ControlLabel>Password</ControlLabel>
-          <FormControl
-            value={this.state.password}
-            onChange={this.handleChange}
-            type="password" />
-        </FormGroup>
-        {this.state.error && <p>{this.state.error.message}</p>}
-        <LoaderButton
-          block
-          bsSize="large"
-          disabled={ ! this.validateForm() }
-          type="submit"
-          isLoading={this.state.isLoading}
-          text="Login"
-          loadingText="Logging in…" />
-      </form>
+      <div className="Login">
+        <form onSubmit={this.handleSubmit}>
+          <FormGroup controlId="email" bsSize="large">
+            <ControlLabel>Email</ControlLabel>
+            <FormControl
+              autoFocus
+              type="email"
+              value={this.state.email}
+              onChange={this.handleChange} />
+          </FormGroup>
+          <FormGroup controlId="password" bsSize="large">
+            <ControlLabel>Password</ControlLabel>
+            <FormControl
+              value={this.state.password}
+              onChange={this.handleChange}
+              type="password" />
+          </FormGroup>
+          {this.state.error && <p>{this.state.error.message}</p>}
+          <LoaderButton
+            block
+            bsSize="large"
+            disabled={ ! this.validateForm() }
+            type="submit"
+            isLoading={this.state.isLoading}
+            text="Login"
+            loadingText="Logging in…" />
+        </form>
+      </div>
     );
   }
 }
 
-export default withRouter(LoginPage);
-
-export { LoginForm };
+export default withRouter(withFirebase(Login));

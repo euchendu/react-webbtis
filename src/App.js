@@ -5,7 +5,15 @@ import { LinkContainer } from "react-router-bootstrap";
 import './App.css';
 import Routes from './Routes';
 
+import { AuthUserContext, withAuthentication } from './components/Session';
+import { withFirebase } from './components/Firebase';
+
 class App extends Component {
+  handleLogout = async event => {
+    this.props.firebase.doSignOut();
+    this.props.history.push("/login");
+  }
+  
   render() {
     return (
       <div className="App container">
@@ -18,14 +26,19 @@ class App extends Component {
           </Navbar.Header>
           <Navbar.Collapse>
             <Nav pullRight>
-              <Fragment>
-                <LinkContainer to="/signup">
-                  <NavItem>Signup</NavItem>
-                </LinkContainer>
-                <LinkContainer to="/login">
-                  <NavItem>Login</NavItem>
-                </LinkContainer>
-              </Fragment>
+              <AuthUserContext.Consumer>
+                {authUser => authUser
+                  ? <NavItem onClick={this.handleLogout}>Logout</NavItem>
+                  : <Fragment>
+                      <LinkContainer to="/signup">
+                        <NavItem>Signup</NavItem>
+                      </LinkContainer>
+                      <LinkContainer to="/login">
+                        <NavItem>Login</NavItem>
+                      </LinkContainer>
+                    </Fragment>
+                }
+              </AuthUserContext.Consumer>
             </Nav>
           </Navbar.Collapse>
         </Navbar>
@@ -35,4 +48,4 @@ class App extends Component {
   }
 }
 
-export default withRouter(App);
+export default withAuthentication(withRouter(withFirebase(App)));

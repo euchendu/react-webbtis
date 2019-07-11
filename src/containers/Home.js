@@ -8,13 +8,19 @@ import {
 } from 'react-bootstrap';
 
 class Home extends Component {
+  handleSubmit = async (event) => {
+    event.preventDefault();
+
+    this.props.history.push('/dashboard');
+  }
+  
   renderLander() {
     return (
       <div className="lander">
         <h1>Webbtis</h1>
         <p>Web Based Book Tracking Information System</p>
         <div>
-          <form>
+          <form onSubmit={this.handleSubmit}>
             <FormGroup controlId="keyword" size="lg">
               <FormControl autoFocus type="text" placeholder="Enter title, author or ISBN" />
             </FormGroup>

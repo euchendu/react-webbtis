@@ -13,4 +13,4 @@ An app for reviewing and sharing book with friends
 
 ## Online version deployed here
 
-https://euchendu-webbtis.firebaseapp.com
+https://emeka-uchendu-webbtis.firebaseapp.com

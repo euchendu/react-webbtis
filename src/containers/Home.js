@@ -40,7 +40,9 @@ class Home extends Component {
           if (authors !== null && authors.length > 0) {
             author = authors[0];
           }
+          results[i].author = author;
           const voters = ((100 - 1) * Math.random() + 1).toFixed(0);
+          results[i].voters = voters;
           const rate = (Math.random() * (5.0 - 1.0) + 1.0).toFixed(1);
           results[i].rate = rate;
           results[i].people=[

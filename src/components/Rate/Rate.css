@@ -6,7 +6,11 @@
   margin-left: 10px;
   margin-top: -5px;
 }
-.Rate span {
+.Rate .Votes {
   font-size: 0.7em;
   margin-left: 15px;
+}
+
+.Rate span {
+  height: 16px;
 }

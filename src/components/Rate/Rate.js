@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './Rate.css';
-import {MdStarBorder, MdStarHalf, MdStar} from 'react-icons/md';
+import {MdStarBorder, MdStar} from 'react-icons/md';
 import Rating from 'react-rating';
 
 class Rate extends Component {

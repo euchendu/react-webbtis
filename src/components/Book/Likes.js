@@ -10,11 +10,11 @@ class Likes extends Component {
     for (let i = 0; i < people.length; i++) {
       photos.push(
         <div key={i} className='PeopleLike'>
-          <img src={require('../../../images/people/' + people[i] + '.png')} />
+          <img alt={people[i]} src={require('../../../images/people/' + people[i] + '.png')} />
         </div>
       );
     }
-    if (people.length != 0) {
+    if (people.length !== 0) {
       let name1Friend = (
         <b>{(people[0].split(' ')[0])}</b>
       );
@@ -24,7 +24,7 @@ class Likes extends Component {
         likesText = (
             <span>{name1Friend} and {numPeople} other friends like this</span>
         )
-      } else if (people.length == 2) {
+      } else if (people.length === 2) {
         name2Friend = (
           <b>{people[1].split(' ')[0]}</b>
         );

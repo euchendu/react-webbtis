@@ -5,7 +5,7 @@ class BookCover extends Component{
   render() {
     return (
       <div className='BookCover'>
-        <img alt={this.props.img} src={require('../../../images/book/'+this.props.img)} />
+        <img alt={this.props.img} src={this.props.img} />
       </div>
     );
   }

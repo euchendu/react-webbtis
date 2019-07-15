@@ -22,13 +22,15 @@ class App extends Component {
             <Navbar.Brand>
               <Link to="/">Webbtis</Link>
             </Navbar.Brand>
-            <Navbar.Toggle />
           </Navbar.Header>
           <Navbar.Collapse>
             <Nav pullRight>
               <AuthUserContext.Consumer>
                 {authUser => authUser
-                  ? <NavItem onClick={this.handleLogout}>Logout</NavItem>
+                  ? <Fragment>
+                      <NavItem>{authUser.username}</NavItem>
+                      <NavItem onClick={this.handleLogout}>Logout</NavItem>
+                    </Fragment>
                   : <Fragment>
                       <LinkContainer to="/signup">
                         <NavItem>Signup</NavItem>

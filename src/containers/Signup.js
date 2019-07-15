@@ -11,6 +11,7 @@ import { withFirebase } from '../components/Firebase';
 
 const INITIAL_STATE = {
   isLoading: false,
+  username: '',
   email: '',
   password: '',
   confirmPassword: '',
@@ -26,6 +27,7 @@ class Signup extends Component {
 
   validateForm() {
     return this.state.email.length > 0
+      && this.state.username.length > 0
       && this.state.password.length > 0
       && this.state.password === this.state.confirmPassword;
   }
@@ -43,7 +45,7 @@ class Signup extends Component {
     this.setState({ error: null });
 
     try {
-      await this.signup(this.state.email, this.state.password);
+      await this.signup(this.state.username, this.state.email, this.state.password);
     }
     catch(e) {
       alert(e);
@@ -51,12 +53,19 @@ class Signup extends Component {
     }
   }
   
-  signup(email, password) {
+  signup(username, email, password) {
     this.props.firebase
       .doCreateUserWithEmailAndPassword(email, password)
       .then(authUser => {
+        // Create a user in Firebase realtime database
+        this.props.firebase
+          .user(authUser.user.uid)
+          .set({
+            username,
+            email,
+          });
         this.setState({ ...INITIAL_STATE });
-        this.prods.history.push('/login');
+        this.props.history.push('/login');
       })
       .catch(error => {
         this.setState({ error });
@@ -68,6 +77,14 @@ class Signup extends Component {
     return (
       <div className="Signup">
         <form onSubmit={this.handleSubmit}>
+          <FormGroup controlId="username" bsSize="large">
+            <ControlLabel>Username</ControlLabel>
+            <FormControl
+              autoFocus
+              type="text"
+              value={this.state.username}
+              onChange={this.handleChange} />
+          </FormGroup>
           <FormGroup controlId="email" bsSize="large">
             <ControlLabel>Email</ControlLabel>
             <FormControl

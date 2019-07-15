@@ -33,6 +33,7 @@ class Book extends Component{
           author={this.props.author}
           rate={this.props.rate}
           voters={this.props.voters}
+          description={this.props.description}
         />
         { like }
         <Likes people={this.props.people} />

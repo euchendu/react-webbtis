@@ -16,6 +16,7 @@ class Books extends Component {
             rate={this.props.books[i].rate}
             voters={this.props.books[i].voters}
             people={this.props.books[i].people}
+            description={this.props.books[i].description}
           >
           </Book>
         );

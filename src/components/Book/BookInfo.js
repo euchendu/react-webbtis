@@ -11,7 +11,7 @@ class BookInfo extends Component{
         <h1>{this.props.name}</h1>
         <p className='Author'>by {this.props.author}</p>
         <Rate rate={this.props.rate} voters={this.props.voters} textColor={textColor} />
-        <BookDescription />
+        <BookDescription text={this.props.description} />
       </div>
     );
   }

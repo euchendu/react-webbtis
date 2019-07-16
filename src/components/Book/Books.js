@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
 import './Books.css';
 import Book from './Book';
+import { AuthUserContext, withAuthentication } from '../../components/Session';
 
 class Books extends Component {
-  render() {
-    let bookCards = [];
-    if (this.props.books !== null) {
+  bookCards = (authUser) => {
+    var cards = [];
+    if (this.props.books !== null && authUser !== null) {
       for (let i = 0; i < this.props.books.length; i++) {
-        bookCards.push(
+        cards.push(
           <Book
-            key={i}
+            key={this.props.books[i].id}
+            id={this.props.books[i].id}
             name={this.props.books[i].name}
             img={this.props.books[i].image} 
             author={this.props.books[i].author}
@@ -17,17 +19,24 @@ class Books extends Component {
             voters={this.props.books[i].voters}
             people={this.props.books[i].people}
             description={this.props.books[i].description}
+            uid={authUser.uid}
           >
           </Book>
         );
       }
     }
+    return cards;
+  };
+
+  render() {
     return (
       <div className='Books'>
-        { bookCards }
+        <AuthUserContext.Consumer>
+          {authUser => this.bookCards(authUser)}
+        </AuthUserContext.Consumer>
       </div>
     );
   }
 }
 
-export default Books;
+export default withAuthentication(Books);

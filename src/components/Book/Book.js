@@ -4,6 +4,7 @@ import BookCover from './BookCover';
 import BookInfo from './BookInfo';
 import Likes from './Likes';
 import { FaRegHeart, FaHeart } from 'react-icons/fa';
+import { withFirebase } from '../../components/Firebase';
 
 class Book extends Component{
   constructor(props) {
@@ -13,17 +14,73 @@ class Book extends Component{
 		};
 	}
   
-  isLiked = () => {
-		this.setState({ liked: !this.state.liked });
+  componentDidMount() {
+    this.props.firebase.book(this.props.id).on('value', function(snapshot) {
+      var people = (snapshot.val() && snapshot.val().people) || [];
+      if (people.length > 0) {
+        var idx = people.indexOf(this.props.uid);
+        if (idx >= 0) {
+          this.setState({ liked: true });
+        }
+      }
+    }.bind(this));
+  }
+
+  like = () => {
+    this.props.firebase.book(this.props.id).once('value').then(function(snapshot) {
+      var bookExists = snapshot.exists();
+      if (bookExists) {
+        var people = (snapshot.val().people) || [];
+        if (!people.includes(this.props.uid)) {
+          people.push(this.props.uid);
+          this.props.firebase
+            .book(this.props.id)
+            .update({
+              people: people,
+            });
+        }
+        this.setState({ liked: true });
+      }
+      else {
+        this.props.firebase
+          .book(this.props.id)
+          .set({
+            name: this.props.name,
+            author: this.props.author,
+            people: [this.props.uid],
+          });
+        this.setState({ liked: true });
+      }
+    }.bind(this));
+	}
+  
+  unlike = () => {
+    this.props.firebase
+      .book(this.props.id)
+      .once('value').then(function(snapshot) {
+        var people = (snapshot.val() && snapshot.val().people) || [];
+        if (people.length > 0) {
+          var idx = people.indexOf(this.props.uid);
+          if (idx >= 0) {
+            people.splice(idx,1);
+            this.props.firebase
+              .book(this.props.id)
+              .update({
+                people: people,
+              });
+          }
+        }
+        this.setState({ liked: false });
+      }.bind(this));
 	}
 
   render() {
     let like = null;
     if (this.state.liked) {
-      like = <FaHeart className='icon' onClick={()=>{this.isLiked()}} />
+      like = <FaHeart className='icon' onClick={()=>{this.unlike()}} />
     }
     else {
-      like = <FaRegHeart className='icon' onClick={()=>{this.isLiked()}} />
+      like = <FaRegHeart className='icon' onClick={()=>{this.like()}} />
     }
     return (
       <div className='Book'>
@@ -42,4 +99,4 @@ class Book extends Component{
   }
 }
 
-export default Book;
+export default withFirebase(Book);

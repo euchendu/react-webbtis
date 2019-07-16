@@ -36,9 +36,11 @@ class Home extends Component {
           results[i].name = results[i].title;
           results[i].image = results[i].thumbnail;
           var author = 'N/A';
-          var authors = results[i].authors;
-          if (authors !== null && authors.length > 0) {
-            author = authors[0];
+          if ('authors' in results[i]) {
+            var authors = results[i].authors;
+            if (authors !== null && authors.length > 0) {
+              author = authors[0];
+            }
           }
           results[i].author = author;
           const voters = ((100 - 1) * Math.random() + 1).toFixed(0);

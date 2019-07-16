@@ -15,15 +15,17 @@ class Book extends Component{
 	}
   
   componentDidMount() {
-    this.props.firebase.book(this.props.id).on('value', function(snapshot) {
-      var people = (snapshot.val() && snapshot.val().people) || [];
-      if (people.length > 0) {
-        var idx = people.indexOf(this.props.uid);
-        if (idx >= 0) {
-          this.setState({ liked: true });
+    if (this.props.uid) {
+      this.props.firebase.book(this.props.id).on('value', function(snapshot) {
+        var people = (snapshot.val() && snapshot.val().people) || [];
+        if (people.length > 0) {
+          var idx = people.indexOf(this.props.uid);
+          if (idx >= 0) {
+            this.setState({ liked: true });
+          }
         }
-      }
-    }.bind(this));
+      }.bind(this));
+    }
   }
 
   like = () => {
@@ -92,7 +94,7 @@ class Book extends Component{
           voters={this.props.voters}
           description={this.props.description}
         />
-        { like }
+        { this.props.uid === null ? '' : like }
         <Likes people={this.props.people} />
       </div>
     );

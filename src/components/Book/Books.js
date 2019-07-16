@@ -6,7 +6,7 @@ import { AuthUserContext, withAuthentication } from '../../components/Session';
 class Books extends Component {
   bookCards = (authUser) => {
     var cards = [];
-    if (this.props.books !== null && authUser !== null) {
+    if (this.props.books !== null) {
       for (let i = 0; i < this.props.books.length; i++) {
         cards.push(
           <Book
@@ -19,7 +19,7 @@ class Books extends Component {
             voters={this.props.books[i].voters}
             people={this.props.books[i].people}
             description={this.props.books[i].description}
-            uid={authUser.uid}
+            uid={authUser === null ? null : authUser.uid}
           >
           </Book>
         );

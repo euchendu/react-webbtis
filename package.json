@@ -6,6 +6,7 @@
     "firebase": "^6.2.4",
     "google-books-search": "^0.3.1",
     "react": "^16.8.6",
+    "react-avatar": "^3.6.0",
     "react-bootstrap": "0.31.0",
     "react-dom": "^16.8.6",
     "react-icons": "^3.7.0",

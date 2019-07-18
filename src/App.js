@@ -8,6 +8,8 @@ import Routes from './Routes';
 import { AuthUserContext, withAuthentication } from './components/Session';
 import { withFirebase } from './components/Firebase';
 
+import Avatar from 'react-avatar';
+
 class App extends Component {
   handleLogout = async event => {
     this.props.firebase.doSignOut();
@@ -28,7 +30,9 @@ class App extends Component {
               <AuthUserContext.Consumer>
                 {authUser => authUser
                   ? <Fragment>
-                      <NavItem>{authUser.username}</NavItem>
+                      <NavItem>
+                        <Avatar name={authUser.username} size="40" round="20px" />
+                      </NavItem>
                       <NavItem onClick={this.handleLogout}>Logout</NavItem>
                     </Fragment>
                   : <Fragment>

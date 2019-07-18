@@ -4,4 +4,13 @@
 
 .App .navbar-brand {
   font-weight: bold;
+  display: flex;
+  align-items: center;
+  height: 60px;
+}
+
+.App .navbar-nav li a {
+  display: flex;
+  align-items: center;
+  height: 60px;
 }
